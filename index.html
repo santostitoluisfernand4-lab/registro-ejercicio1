@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuestro Historial de Ejercicio</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <h1>💪 Registro de Ejercicio en Casa 🏠</h1>
+        <p>¡Tu historial diario de disciplina y constancia!</p>
+    </header>
+
+    <main class="contenedor-marcador">
+        <!-- Sección Tuya -->
+        <section class="tarjeta-progreso" id="perfil-mio">
+            <h2>Mi Progreso Luis Fernando</h2>
+            <div class="contador" id="contador-mio">0</div>
+            <p class="txt-sub">Días completados</p>
+            <button class="btn-sumar" id="btn-mio">+1 Día Logrado</button>
+            
+            <h3>📋 Historial de Evidencias</h3>
+            <div class="historial" id="historial-mio">
+                <!-- Los días y fotos se agregarán aquí dinámicamente -->
+            </div>
+        </section>
+
+        <!-- Sección de tu Amiga -->
+        <section class="tarjeta-progreso" id="perfil-amiga">
+            <h2>Progreso de mi Amiga Esther</h2>
+            <div class="contador" id="contador-amiga">0</div>
+            <p class="txt-sub">Días completados</p>
+            <button class="btn-sumar" id="btn-amiga">+1 Día Logrado</button>
+            
+            <h3>📋 Historial de Evidencias</h3>
+            <div class="historial" id="historial-amiga">
+                <!-- Los días y fotos se agregarán aquí dinámicamente -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Input de archivo oculto global para gestionar las cargas -->
+    <input type="file" id="input-foto-global" accept="image/*" style="display: none;">
+
+    <footer>
+        <button id="btn-reiniciar">Reiniciar Todo el Historial</button>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

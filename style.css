@@ -1,0 +1,299 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #f0f4f8 0%, #e2ebf0 100%);
+    color: #2d3748;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    padding: 30px 20px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+header h1 {
+    font-size: 2.4rem;
+    background: linear-gradient(45deg, #4f46e5, #06b6d4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800;
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+}
+
+header p {
+    color: #64748b;
+    font-weight: 500;
+    font-size: 1.1rem;
+}
+
+.contenedor-marcador {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    width: 100%;
+    max-width: 1000px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+
+/* Tarjetas de Progreso con Estilo de Aplicación Moderna */
+.tarjeta-progreso {
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 30px;
+    text-align: center;
+    flex: 1;
+    min-width: 320px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e2e8f0;
+    transition: transform 0.3s ease;
+}
+
+.tarjeta-progreso:hover {
+    transform: translateY(-2px);
+}
+
+/* Diferenciación sutil e inclusiva en los encabezados de las tarjetas */
+#perfil-mio h2 {
+    color: #4f46e5;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+#perfil-amiga h2 {
+    color: #0d9488;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.contador {
+    font-size: 4rem;
+    font-weight: 800;
+    color: #1e293b;
+    margin: 5px 0;
+    letter-spacing: -1px;
+}
+
+.txt-sub {
+    color: #94a3b8;
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin-bottom: 20px;
+}
+
+/* Botones principales de acción */
+.btn-sumar {
+    color: white;
+    border: none;
+    padding: 14px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 100%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+#perfil-mio .btn-sumar {
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+}
+
+#perfil-mio .btn-sumar:hover {
+    background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+    box-shadow: 0 6px 16px rgba(79, 70, 229, 0.3);
+}
+
+#perfil-amiga .btn-sumar {
+    background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);
+}
+
+#perfil-amiga .btn-sumar:hover {
+    background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
+    box-shadow: 0 6px 16px rgba(13, 148, 136, 0.3);
+}
+
+.tarjeta-progreso h3 {
+    font-size: 1.1rem;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    text-align: left;
+    color: #475569;
+    font-weight: 600;
+    letter-spacing: -0.2px;
+}
+
+/* Historial interno */
+.historial {
+    max-height: 350px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding-right: 5px;
+    text-align: left;
+}
+
+/* Bloques del historial diario */
+.bloque-dia {
+    background-color: #f8fafc;
+    border-radius: 16px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border: 1px solid #edf2f7;
+    position: relative;
+}
+
+#perfil-mio .bloque-dia {
+    border-left: 4px solid #6366f1;
+}
+
+#perfil-amiga .bloque-dia {
+    border-left: 4px solid #14b8a6;
+}
+
+.meta-dia {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+#perfil-mio .meta-dia { color: #4f46e5; }
+#perfil-amiga .meta-dia { color: #0d9488; }
+
+.frase-dia {
+    font-size: 0.9rem;
+    color: #475569;
+    line-height: 1.4;
+    font-weight: 500;
+}
+
+/* Área de evidencia fotográfica */
+.contenedor-foto-bloque {
+    width: 100%;
+    height: 160px;
+    background-color: #f1f5f9;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 2px dashed #cbd5e1;
+    margin-top: 4px;
+}
+
+.btn-subir-bloque {
+    background-color: #ffffff;
+    color: #475569;
+    border: 1px solid #cbd5e1;
+    padding: 8px 16px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.btn-subir-bloque:hover {
+    color: #1e293b;
+    border-color: #94a3b8;
+    background-color: #f8fafc;
+}
+
+.img-historial {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Barra de desplazamiento estética */
+.historial::-webkit-scrollbar {
+    width: 6px;
+}
+.historial::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1;
+    border-radius: 20px;
+}
+
+footer {
+    margin-top: 50px;
+    margin-bottom: 20px;
+}
+
+#btn-reiniciar {
+    background: transparent;
+    color: #94a3b8;
+    border: 1px solid #cbd5e1;
+    padding: 10px 20px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+#btn-reiniciar:hover {
+    color: #ef4444;
+    border-color: #fca5a5;
+    background-color: #fff5f5;
+}
+
+/* ==========================================
+   ADAPTACIÓN PARA DISPOSITIVOS MÓVILES (CELULARES)
+   ========================================== */
+@media (max-width: 768px) {
+    body {
+        padding: 15px 10px; /* Reduce los márgenes externos para ganar espacio */
+    }
+
+    header h1 {
+        font-size: 1.8rem; /* Ajusta el tamaño del título principal para que no se corte */
+        line-height: 1.2;
+    }
+
+    header p {
+        font-size: 0.95rem;
+    }
+
+    .contenedor-marcador {
+        gap: 20px; /* Reduce el espacio de separación entre las tarjetas */
+        flex-direction: column; /* Apila las tarjetas verticalmente */
+    }
+
+    .tarjeta-progreso {
+        width: 100%; /* Obliga a la tarjeta a ocupar todo el ancho disponible del celular */
+        padding: 20px; /* Espaciado interno más compacto */
+        border-radius: 20px;
+    }
+
+    .contador {
+        font-size: 3rem; /* Reduce un poco el tamaño del número del contador */
+    }
+
+    .btn-sumar {
+        padding: 12px; /* Botón ligeramente más compacto pero fácil de presionar */
+        font-size: 0.95rem;
+    }
+
+    .historial {
+        max-height: 280px; /* Reduce un poco la altura máxima para que quepa bien en la pantalla */
+    }
+
+    .contenedor-foto-bloque {
+        height: 140px; /* Modifica la altura de la imagen para que sea cómoda de ver en vertical */
+    }
+}
