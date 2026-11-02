@@ -1,18 +1,23 @@
-// CONFIGURACIÓN DE FIREBASE
+// IMPORTACIÓN MODERNA DE FIREBASE
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getDatabase, ref, onValue, set, remove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+// Configuración corregida y enlazada a tu proyecto
 const firebaseConfig = {
     apiKey: "AIzaSyAaTZ9-b6tzpcSDCNZywFST9H8NpKWE24s",
-    authDomain: "://firebaseapp.com",
-    databaseURL: "https://firebaseio.com",
+    authDomain: "ejercicio-compartido.firebaseapp.com",
+    databaseURL: "https://ejercicio-compartido-default-rtdb.firebaseio.com",
     projectId: "ejercicio-compartido",
     storageBucket: "ejercicio-compartido.firebasestorage.app",
     messagingSenderId: "717200775816",
     appId: "1:717200775816:web:1cff0ba6858c3bf0094d3"
 };
 
-// Inicializar Firebase
-firebase.initializeApp(firebaseConfig);
-const database = firebase.database();
+// Inicializar servicios modulares de Firebase
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
 
+// Banco único de frases motivacionales
 const frases = [
     "¡Excelente trabajo! Cada gota de sudor te acerca a tu meta. 🏃‍♀️✨",
     "¡Espectacular! Tu cuerpo del futuro te lo agradecerá. 🙌",
@@ -35,21 +40,21 @@ const historialAmigaContenedor = document.getElementById('historial-amiga');
 const inputFotoGlobal = document.getElementById('input-foto-global');
 const btnReiniciar = document.getElementById('btn-reiniciar');
 
-// Estructuras de datos principales recuperadas de memoria
+// Estructuras de datos principales en tiempo real
 let datosMios = [];
 let datosAmiga = [];
 
-// Variables auxiliares para saber a qué bloque adjuntar la foto subida
+// Variables auxiliares para la gestión de evidencias fotográficas
 let perfilDestinoActivo = '';
 let idBloqueActivo = null;
 
 // ESCUCHAR CAMBIOS EN TIEMPO REAL DESDE FIREBASE
-database.ref('progreso/mio').on('value', (snapshot) => {
+onValue(ref(db, 'progreso/mio'), (snapshot) => {
     datosMios = snapshot.val() || [];
     actualizarPantalla();
 });
 
-database.ref('progreso/amiga').on('value', (snapshot) => {
+onValue(ref(db, 'progreso/amiga'), (snapshot) => {
     datosAmiga = snapshot.val() || [];
     actualizarPantalla();
 });
@@ -74,7 +79,7 @@ function agregarDia(perfil) {
     };
 
     lista.unshift(nuevoRegistro); 
-    database.ref('progreso/' + perfil).set(lista); // Guarda directo en la nube de Firebase
+    set(ref(db, 'progreso/' + perfil), lista);
 }
 
 function renderizarHistorial(lista, contenedor, perfil) {
@@ -131,7 +136,7 @@ inputFotoGlobal.addEventListener('change', () => {
             
             if (registro) {
                 registro.foto = e.target.result;
-                database.ref('progreso/' + perfil).set(lista); // Sube la foto en Base64 a Firebase
+                set(ref(db, 'progreso/' + perfil), lista);
             }
             inputFotoGlobal.value = '';
         };
@@ -147,131 +152,11 @@ function actualizarPantalla() {
     renderizarHistorial(datosAmiga, historialAmigaContenedor, 'amiga');
 }
 
+// Botón de reinicio global modular para la base de datos
 btnReiniciar.addEventListener('click', () => {
     if (confirm('¿Estás segura de borrar por completo TODO el historial en la nube de ambas?')) {
-        database.ref('progreso').remove().then(() => {
+        remove(ref(db, 'progreso')).then(() => {
             location.reload();
         });
-    }
-});
-
-
-
-// Evento para añadir un día tuyo
-btnMio.addEventListener('click', () => {
-    agregarDia('mio');
-});
-
-// Evento para añadir un día de tu amiga
-btnAmiga.addEventListener('click', () => {
-    agregarDia('amiga');
-});
-
-// Función central para registrar un nuevo día en el arreglo
-function agregarDia(perfil) {
-    const lista = perfil === 'mio' ? datosMios : datosAmiga;
-    const nuevoNumeroDia = lista.length + 1;
-    
-    // Obtener la fecha del día actual
-    const hoy = new Date();
-    const fechaFormateada = hoy.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
-
-    // Crear el nuevo registro del día
-    const nuevoRegistro = {
-        id: Date.now() + Math.random(), // Genera un ID único preciso
-        numeroDia: nuevoNumeroDia,
-        fecha: fechaFormateada,
-        frase: frases[Math.floor(Math.random() * frases.length)],
-        foto: "" // Vacío hasta que decidan subir la imagen de este día
-    };
-
-    lista.unshift(nuevoRegistro); // Coloca el día más reciente arriba del todo
-    guardarYActualizar();
-}
-
-// Función encargada de dibujar los bloques del historial en el HTML
-function renderizarHistorial(lista, contenedor, perfil) {
-    contenedor.innerHTML = ''; // Limpiar el área antes de redibujar
-
-    if (lista.length === 0) {
-        contenedor.innerHTML = '<p style="color: #6c757d; font-size: 0.9rem; font-style: italic;">No hay días registrados aún.</p>';
-        return;
-    }
-
-    lista.forEach(item => {
-        const bloque = document.createElement('div');
-        bloque.className = 'bloque-dia';
-
-        // Estructura de texto del bloque
-        let contenidoHtml = `
-            <div class="meta-dia">
-                <span>Día #${item.numeroDia}</span>
-                <span>📅 ${item.fecha}</span>
-            </div>
-            <div class="frase-dia">${item.frase}</div>
-            <div class="contenedor-foto-bloque">
-        `;
-
-        // Si ya tiene foto asociada, la muestra. Si no, muestra el botón para subirla.
-        if (item.foto) {
-            contenidoHtml += `<img src="${item.foto}" class="img-historial" alt="Evidencia">`;
-        } else {
-            contenidoHtml += `<button class="btn-subir-bloque" onclick="activarSubidaFoto('${perfil}', ${item.id})">📷 Añadir Foto</button>`;
-        }
-
-        contenidoHtml += `</div>`;
-        bloque.innerHTML = contenidoHtml;
-        contenedor.appendChild(bloque);
-    });
-}
-
-// Conectar el botón oculto del sistema con el clic del bloque específico
-window.activarSubidaFoto = function(perfil, id) {
-    perfilDestinoActivo = perfil;
-    idBloqueActivo = id;
-    inputFotoGlobal.click(); // Abre el explorador de archivos del dispositivo
-};
-
-// Escuchar cuando el usuario selecciona un archivo de imagen
-inputFotoGlobal.addEventListener('change', () => {
-    const archivo = inputFotoGlobal.files[0];
-    if (archivo) {
-        const lector = new FileReader();
-        lector.onload = function (e) {
-            const lista = perfilDestinoActivo === 'mio' ? datosMios : datosAmiga;
-            // Buscar el día específico por su ID único para inyectarle la foto en Base64
-            const registro = lista.find(item => item.id === idBloqueActivo);
-            if (registro) {
-                registro.foto = e.target.result;
-                guardarYActualizar();
-            }
-            inputFotoGlobal.value = ''; // Limpiar el input para permitir cargas consecutivas
-        };
-        lector.readAsDataURL(archivo);
-    }
-});
-
-// Guardar los arreglos en el almacenamiento del navegador y redibujar la interfaz
-function guardarYActualizar() {
-    localStorage.setItem('datosMios', JSON.stringify(datosMios));
-    localStorage.setItem('datosAmiga', JSON.stringify(datosAmiga));
-    actualizarPantalla();
-}
-
-function actualizarPantalla() {
-    contadorMio.textContent = datosMios.length;
-    contadorAmiga.textContent = datosAmiga.length;
-
-    renderizarHistorial(datosMios, historialMioContenedor, 'mio');
-    renderizarHistorial(datosAmiga, historialAmigaContenedor, 'amiga');
-}
-
-// Limpiar la memoria del navegador por completo
-btnReiniciar.addEventListener('click', () => {
-    if (confirm('¿Estás segura de borrar por completo todo tu historial y el de tu amiga?')) {
-        localStorage.clear();
-        datosMios = [];
-        datosAmiga = [];
-        guardarYActualizar();
     }
 });
